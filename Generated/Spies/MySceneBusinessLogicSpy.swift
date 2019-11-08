@@ -9,4 +9,11 @@ final class MySceneBusinessLogicSpy: BusinessLogic {
     fillEmailCalled = true
     fillEmailRequestPassed = request
   }
+
+  private(set) var fillPasswordCalled = false
+  private(set) var fillPasswordRequestPassed: MyScene.EnterPassword.Request?
+  func fillPassword(request: MyScene.EnterPassword.Request) {
+    fillPasswordCalled = true
+    fillPasswordRequestPassed = request
+  }
 }

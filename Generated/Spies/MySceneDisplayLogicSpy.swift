@@ -9,4 +9,11 @@ final class MySceneDisplayLogicSpy: MySceneDisplayLogic {
     displayEmailCalled = true
     displayEmailViewModelPassed = response
   }
+
+  private(set) var displayPasswordCalled = false
+  private(set) var displayPasswordViewModelPassed: MyScene.EnterPassword.ViewModel?
+  func displayPassword(viewModel: MyScene.EnterPassword.ViewModel) {
+    displayPasswordCalled = true
+    displayPasswordViewModelPassed = response
+  }
 }

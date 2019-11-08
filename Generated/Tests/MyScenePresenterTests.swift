@@ -16,4 +16,10 @@ final class MyScenePresenterTests: XCTestCase {
 
     XCTAssertTrue(viewSpy.displayEmailCalled)
   }
+
+  func test_presentPassword_callsViewDisplayPassword() {
+    sut.presentPassword(response: .init())
+
+    XCTAssertTrue(viewSpy.displayPasswordCalled)
+  }
 }

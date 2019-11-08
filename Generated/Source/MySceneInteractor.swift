@@ -3,6 +3,7 @@
 
 protocol MySceneBusinessLogic {
   func fillEmail(request: MyScene.EnterEmail.Request)
+  func fillPassword(request: MyScene.EnterPassword.Request)
 }
 
 final class MySceneInteractor: MySceneBusinessLogic {
@@ -14,5 +15,8 @@ final class MySceneInteractor: MySceneBusinessLogic {
 
   func fillEmail(request: MyScene.EnterEmail.Request) {
       presenter.presentEmail(response: .init())
+  } 
+  func fillPassword(request: MyScene.EnterPassword.Request) {
+      presenter.presentPassword(response: .init())
   } 
 }

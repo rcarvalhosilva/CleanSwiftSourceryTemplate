@@ -12,4 +12,10 @@ final class MySceneInteractorTests: XCTestCase {
 
     XCTAssertTrue(presenterSpy.presentEmailCalled)
   }
+
+  func test_fillPassword_callsPresenterPresentPassword() {
+    sut.fillPassword(request: .init())
+
+    XCTAssertTrue(presenterSpy.presentPasswordCalled)
+  }
 }

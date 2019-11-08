@@ -9,6 +9,17 @@ enum MyScene {
       // sourcery: method = displayEmail
       struct ViewModel {}
     }
+
+    enum EnterPassword {
+      // sourcery: method = fillPassword
+      struct Request {}
+
+      // sourcery: method = presentPassword
+      struct Response {}
+
+      // sourcery: method = displayPassword
+      struct ViewModel {}
+    }
 }
 
 extension MyScene: Scene {}

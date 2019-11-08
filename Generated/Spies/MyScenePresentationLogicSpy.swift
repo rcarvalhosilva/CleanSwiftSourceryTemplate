@@ -9,4 +9,11 @@ final class MyScenePresentationLogicSpy: MyScenePresentationLogic {
     presentEmailCalled = true
     presentEmailResponsePassed = response
   }
+
+  private(set) var presentPasswordCalled = false
+  private(set) var presentPasswordResponsePassed: MyScene.EnterPassword.Response?
+  func presentPassword(response: MyScene.EnterPassword.Response) {
+    presentPasswordCalled = true
+    presentPasswordResponsePassed = response
+  }
 }

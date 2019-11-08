@@ -5,6 +5,7 @@ import UIKit
 
 protocol MySceneDisplayLogic {
   func displayEmail(viewModel: MyScene.EnterEmail.ViewModel)
+  func displayPassword(viewModel: MyScene.EnterPassword.ViewModel)
 }
 
 final class MySceneViewController: UIViewController, MySceneDisplayLogic {
@@ -15,4 +16,5 @@ final class MySceneViewController: UIViewController, MySceneDisplayLogic {
   }
 
   func displayEmail(viewModel: MyScene.EnterEmail.ViewModel) {} 
+  func displayPassword(viewModel: MyScene.EnterPassword.ViewModel) {} 
 }
