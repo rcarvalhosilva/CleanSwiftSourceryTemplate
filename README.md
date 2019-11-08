@@ -19,8 +19,19 @@ enum MyScene {
 
       // sourcery: method = presentEmail
       struct Response {}
-      
+
       // sourcery: method = displayEmail
+      struct ViewModel {}
+    }
+
+    enum EnterPassword {
+      // sourcery: method = fillPassword
+      struct Request {}
+
+      // sourcery: method = presentPassword
+      struct Response {}
+
+      // sourcery: method = displayPassword
       struct ViewModel {}
     }
 }
@@ -40,6 +51,9 @@ when you run sourcery with the this template it will create the following files:
 - MySceneViewController.swift
 - MySceneDisplayLogicSpy.swift
 
+You can see the generated code from the example above in the [Generated](Generated) folder of this repo. The files were generated using Sourcery installed via Homebrew using the following cli command:
+
+`sourcery --sources ./ExampleSource --templates ./Template --output ./Generated`
 
 ## License
 
@@ -47,4 +61,4 @@ Sourcery is available under the MIT license. See [LICENSE](LICENSE) for more inf
 
 You can [follow me on Twitter][1]
 
-[1]: https://twitter.com/rcdasilva94 
+[1]: https://twitter.com/rcdasilva94
