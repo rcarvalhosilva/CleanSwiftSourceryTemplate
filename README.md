@@ -9,7 +9,7 @@ Just follow the steps in the Sourcery Github page to install it and the usage fo
 
 The template makes use of a marker protocol called `Scene` and a annotation `method`. Since this template is meant to be run one time just to create the files you can remove the protocol and the annotation from your source code. *You dont have to declare the protocol!*
 
-Given a Scene use case models files like the following:
+Given a scene use case models file like the following:
 
 ```Swift
 enum MyScene {
@@ -45,7 +45,7 @@ when you run sourcery with the this template it will create the following files:
 - MySceneInteractorTests.swift
 
 - MyScenePresenter.swift
-- MyScenePresentationLogic.swift
+- MyScenePresentationLogicSpy.swift
 - MyScenePresenterTests.swift
 
 - MySceneViewController.swift
