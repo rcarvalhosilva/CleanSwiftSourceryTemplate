@@ -7,6 +7,40 @@ Sourcery template to generate CleanSwift boilerplate code from use case definiti
 ## How to use it?
 Just follow the steps in the Sourcery Github page to install it and the usage for your instalation.
 
+The template makes use of a marker protocol called `Scene` and a annotation `method`. Since this template is meant to be run one time just to create the files you can remove the protocol and the annotation from your source code.
+
+Given a Scene use case models files like the following:
+
+```Swift
+enum MyScene {
+    enum EnterEmail {
+      // sourcery: method = fillEmail
+      struct Request: {}
+
+      // sourcery: method = presentEmail
+      struct Response {}
+      
+      // sourcery: method = displayEmail
+      struct ViewModel {}
+    }
+}
+
+extension MyScene: Scene {}
+```
+
+when you run sourcery with the this template it will create the following files:
+- MySceneInteractor.swift
+- MySceneBusinessLogicSpy.swift
+- MySceneInteractorTests.swift
+
+- MyScenePresenter.swift
+- MyScenePresentationLogic.swift
+- MyScenePresenterTests.swift
+
+- MySceneViewController.swift
+- MySceneDisplayLogicSpy.swift
+
+
 ## License
 
 Sourcery is available under the MIT license. See [LICENSE](LICENSE) for more information.
