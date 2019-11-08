@@ -105,7 +105,7 @@
 
 
 {% for type in types.based.Scene where type.isExtension == false %}
-// sourcery:file:{{ type.name }}Interactor.swift
+// sourcery:file:Source/{{ type.name }}Interactor.swift
 protocol {{ type.name }}BusinessLogic {
   {% call interactorUseCases false%}
 }
@@ -121,13 +121,13 @@ final class {{ type.name }}Interactor: {{ type.name }}BusinessLogic {
 }
 // sourcery:end
 
-// sourcery:file:{{ type.name }}BusinessLogicSpy.swift
+// sourcery:file:Spies/{{ type.name }}BusinessLogicSpy.swift
 final class {{ type.name }}BusinessLogicSpy: {{{ type.name }}BusinessLogic {
   {% call interactorSpyBody %}
 }
 // sourcery:end
 
-// sourcery:file:{{ type.name }}InteractorTests.swift
+// sourcery:file:Tests/{{ type.name }}InteractorTests.swift
 import XCTest
 
 final class {{ type.name }}InteractorTests: XCTestCase {
@@ -137,7 +137,7 @@ final class {{ type.name }}InteractorTests: XCTestCase {
 }
 // sourcery:end
 
-// sourcery:file:{{ type.name }}Presenter.swift
+// sourcery:file:Source/{{ type.name }}Presenter.swift
 protocol {{ type.name }}PresentationLogic {
   {% call presenterUseCases false%}
 }
@@ -149,7 +149,7 @@ final class {{ type.name }}Presenter: {{ type.name }}PresentationLogic {
 }
 // sourcery:end
 
-// sourcery:file:{{ type.name }}PresenterTests.swift
+// sourcery:file:Tests/{{ type.name }}PresenterTests.swift
 import XCTest
 
 final class {{ type.name }}PresenterTests: XCTestCase {
@@ -163,13 +163,13 @@ final class {{ type.name }}PresenterTests: XCTestCase {
 }
 // sourcery:end
 
-// sourcery:file:{{ type.name }}PresentationLogicSpy.swift
+// sourcery:file:Spies/{{ type.name }}PresentationLogicSpy.swift
 final class {{ type.name }}PresentationLogicSpy: {{ type.name }}PresentationLogic {
   {% call presenterSpyBody %}
 }
 // sourcery:end
 
-// sourcery:file:{{ type.name }}ViewController.swift
+// sourcery:file:Source/{{ type.name }}ViewController.swift
 import UIKit
 
 protocol {{ type.name }}DisplayLogic {
@@ -187,7 +187,7 @@ final class {{ type.name }}ViewController: UIViewController, {{ type.name }}Disp
 }
 // sourcery:end
 
-// sourcery:file:{{ type.name }}DisplayLogicSpy.swift
+// sourcery:file:Spies/{{ type.name }}DisplayLogicSpy.swift
 final class {{ type.name }}DisplayLogicSpy: {{ type.name }}DisplayLogic {
   {% call viewSpyBody %}
 }
