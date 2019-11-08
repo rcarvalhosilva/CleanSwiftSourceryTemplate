@@ -7,7 +7,7 @@ Sourcery template to generate CleanSwift boilerplate code from use case definiti
 ## How to use it?
 Just follow the steps in the Sourcery Github page to install it and the usage for your instalation.
 
-The template makes use of a marker protocol called `Scene` and a annotation `method`. Since this template is meant to be run one time just to create the files you can remove the protocol and the annotation from your source code.
+The template makes use of a marker protocol called `Scene` and a annotation `method`. Since this template is meant to be run one time just to create the files you can remove the protocol and the annotation from your source code. *You dont have to declare the protocol!*
 
 Given a Scene use case models files like the following:
 
