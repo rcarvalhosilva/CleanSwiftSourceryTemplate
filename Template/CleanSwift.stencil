@@ -96,7 +96,7 @@
   private(set) var {{type.annotations.method}}ViewModelPassed: {{ type.name }}?
   func {{type.annotations.method}}(viewModel: {{ type.name }}) {
     {{type.annotations.method}}Called = true
-    {{type.annotations.method}}ViewModelPassed = response
+    {{type.annotations.method}}ViewModelPassed = viewModel
   }
 {% endfor %}
 {% endfor %}
@@ -122,7 +122,7 @@ final class {{ type.name }}Interactor: {{ type.name }}BusinessLogic {
 // sourcery:end
 
 // sourcery:file:Spies/{{ type.name }}BusinessLogicSpy.swift
-final class {{ type.name }}BusinessLogicSpy: {{{ type.name }}BusinessLogic {
+final class {{ type.name }}BusinessLogicSpy: {{ type.name }}BusinessLogic {
   {% call interactorSpyBody %}
 }
 // sourcery:end
@@ -154,7 +154,7 @@ import XCTest
 
 final class {{ type.name }}PresenterTests: XCTestCase {
   private let viewSpy = {{ type.name }}DisplayLogicSpy()
-  private let sut = {{ type.name }}ViewController()
+  private let sut = {{ type.name }}Presenter()
 
   override func setUp() {
     sut.view = viewSpy
@@ -181,6 +181,7 @@ final class {{ type.name }}ViewController: UIViewController, {{ type.name }}Disp
 
   init(interactor: {{ type.name }}BusinessLogic) {
     self.interactor = interactor
+    super.init(nibName: nil, bundle: nil)
   }
 
   {% call viewUseCases true%}

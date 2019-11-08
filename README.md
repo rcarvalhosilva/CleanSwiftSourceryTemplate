@@ -55,6 +55,8 @@ You can see the generated code from the example above in the [Generated](Generat
 
 `sourcery --sources ./ExampleSource --templates ./Template --output ./Generated`
 
+Don't forget to add `@testable import <YourTarget>` inside your tests and spy files
+
 ## License
 
 Sourcery is available under the MIT license. See [LICENSE](LICENSE) for more information.
