@@ -13,6 +13,7 @@ final class MySceneViewController: UIViewController, MySceneDisplayLogic {
 
   init(interactor: MySceneBusinessLogic) {
     self.interactor = interactor
+    super.init(nibName: nil, bundle: nil)
   }
 
   func displayEmail(viewModel: MyScene.EnterEmail.ViewModel) {} 

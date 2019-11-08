@@ -5,7 +5,7 @@ import XCTest
 
 final class MyScenePresenterTests: XCTestCase {
   private let viewSpy = MySceneDisplayLogicSpy()
-  private let sut = MySceneViewController()
+  private let sut = MyScenePresenter()
 
   override func setUp() {
     sut.view = viewSpy

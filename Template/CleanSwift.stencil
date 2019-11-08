@@ -1,9 +1,9 @@
 {% macro interactorUseCases implemented %}
 {% for useCase in type.containedTypes %}
-{% for type in useCase.containedTypes where type.localName == "Request" and type|annotated:"method" %}
-  func {{type.annotations.method}}(request: {{ type.name }}){% if implemented %} {
-    {% for type in useCase.containedTypes where type.localName == "Response" and type|annotated:"method" %}
-      presenter.{{type.annotations.method}}(response: .init())
+{% for requestType in useCase.containedTypes where requestType.localName == "Request" and requestType|annotated:"method" %}
+  func {{requestType.annotations.method}}(request: {{ requestType.name }}){% if implemented %} {
+    {% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
+      presenter.{{responseType.annotations.method}}(response: .init())
     {% endfor %}
   } {% endif %}
 {% endfor %}
@@ -12,13 +12,13 @@
 
 {% macro interactorSpyBody %}
 {% for useCase in type.containedTypes %}
-{% for type in useCase.containedTypes where type.localName == "Request" and type|annotated:"method" %}
+{% for requestType in useCase.containedTypes where requestType.localName == "Request" and requestType|annotated:"method" %}
 
-  private(set) var {{type.annotations.method}}Called = false
-  private(set) var {{type.annotations.method}}RequestPassed: {{ type.name }}?
-  func {{type.annotations.method}}(request: {{ type.name }}) {
-    {{type.annotations.method}}Called = true
-    {{type.annotations.method}}RequestPassed = request
+  private(set) var {{requestType.annotations.method}}Called = false
+  private(set) var {{requestType.annotations.method}}RequestPassed: {{ requestType.name }}?
+  func {{requestType.annotations.method}}(request: {{ requestType.name }}) {
+    {{requestType.annotations.method}}Called = true
+    {{requestType.annotations.method}}RequestPassed = request
   }
 {% endfor %}
 {% endfor %}
@@ -41,10 +41,10 @@
 
 {% macro presenterUseCases implemented %}
 {% for useCase in type.containedTypes %}
-{% for type in useCase.containedTypes where type.localName == "Response" and type|annotated:"method" %}
-  func {{type.annotations.method}}(response: {{ type.name }}){% if implemented %} {
-    {% for type in useCase.containedTypes where type.localName == "ViewModel" and type|annotated:"method" %}
-      view?.{{type.annotations.method}}(viewModel: .init())
+{% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
+  func {{responseType.annotations.method}}(response: {{ responseType.name }}){% if implemented %} {
+    {% for viewModelType in useCase.containedTypes where viewModelType.localName == "ViewModel" and viewModelType|annotated:"method" %}
+      view?.{{viewModelType.annotations.method}}(viewModel: .init())
     {% endfor %}
   } {% endif %}
 {% endfor %}
@@ -68,13 +68,13 @@
 
 {% macro presenterSpyBody %}
 {% for useCase in type.containedTypes %}
-{% for type in useCase.containedTypes where type.localName == "Response" and type|annotated:"method" %}
+{% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
 
-  private(set) var {{type.annotations.method}}Called = false
-  private(set) var {{type.annotations.method}}ResponsePassed: {{ type.name }}?
-  func {{type.annotations.method}}(response: {{ type.name }}) {
-    {{type.annotations.method}}Called = true
-    {{type.annotations.method}}ResponsePassed = response
+  private(set) var {{responseType.annotations.method}}Called = false
+  private(set) var {{responseType.annotations.method}}ResponsePassed: {{ responseType.name }}?
+  func {{responseType.annotations.method}}(response: {{ responseType.name }}) {
+    {{responseType.annotations.method}}Called = true
+    {{responseType.annotations.method}}ResponsePassed = response
   }
 {% endfor %}
 {% endfor %}
@@ -82,21 +82,21 @@
 
 {% macro viewUseCases implemented %}
 {% for useCase in type.containedTypes %}
-{% for type in useCase.containedTypes where type.localName == "ViewModel" and type|annotated:"method" %}
-  func {{type.annotations.method}}(viewModel: {{ type.name }}){% if implemented %} {} {% endif %}
+{% for viewModel in useCase.containedTypes where viewModel.localName == "ViewModel" and viewModel|annotated:"method" %}
+  func {{viewModel.annotations.method}}(viewModel: {{ viewModel.name }}){% if implemented %} {} {% endif %}
 {% endfor %}
 {% endfor %}
 {% endmacro %}
 
 {% macro viewSpyBody %}
 {% for useCase in type.containedTypes %}
-{% for type in useCase.containedTypes where type.localName == "ViewModel" and type|annotated:"method" %}
+{% for viewModel in useCase.containedTypes where viewModel.localName == "ViewModel" and viewModel|annotated:"method" %}
 
-  private(set) var {{type.annotations.method}}Called = false
-  private(set) var {{type.annotations.method}}ViewModelPassed: {{ type.name }}?
-  func {{type.annotations.method}}(viewModel: {{ type.name }}) {
-    {{type.annotations.method}}Called = true
-    {{type.annotations.method}}ViewModelPassed = viewModel
+  private(set) var {{viewModel.annotations.method}}Called = false
+  private(set) var {{viewModel.annotations.method}}ViewModelPassed: {{ viewModel.name }}?
+  func {{viewModel.annotations.method}}(viewModel: {{ viewModel.name }}) {
+    {{viewModel.annotations.method}}Called = true
+    {{viewModel.annotations.method}}ViewModelPassed = viewModel
   }
 {% endfor %}
 {% endfor %}
