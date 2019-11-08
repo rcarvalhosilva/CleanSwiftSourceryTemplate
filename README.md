@@ -15,7 +15,7 @@ Given a Scene use case models files like the following:
 enum MyScene {
     enum EnterEmail {
       // sourcery: method = fillEmail
-      struct Request: {}
+      struct Request {}
 
       // sourcery: method = presentEmail
       struct Response {}
