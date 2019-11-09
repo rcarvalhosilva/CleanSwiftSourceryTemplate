@@ -188,6 +188,16 @@ final class {{ type.name }}ViewController: UIViewController, {{ type.name }}Disp
 }
 // sourcery:end
 
+// sourcery:file:Tests/{{ type.name }}ViewControllerTests.swift
+import XCTest
+
+final class {{ type.name }}ViewControllerTests: XCTestCase {
+  private let interactorSpy = {{ type.name }}BusinessLogicSpy()
+  private lazy var sut = {{ type.name }}ViewController(interactor: interactorSpy)
+
+}
+// sourcery:end
+
 // sourcery:file:Spies/{{ type.name }}DisplayLogicSpy.swift
 final class {{ type.name }}DisplayLogicSpy: {{ type.name }}DisplayLogic {
   {% call viewSpyBody %}

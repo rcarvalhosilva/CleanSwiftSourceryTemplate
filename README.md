@@ -50,6 +50,7 @@ when you run sourcery with the this template it will create the following files:
 
 - MySceneViewController.swift
 - MySceneDisplayLogicSpy.swift
+- MySceneViewControllerTests.swift
 
 You can see the generated code from the example above in the [Generated](Generated) folder of this repo. The files were generated using Sourcery installed via Homebrew using the following cli command:
 
