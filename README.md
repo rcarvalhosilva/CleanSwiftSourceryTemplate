@@ -52,6 +52,10 @@ when you run sourcery with the this template it will create the following files:
 - MySceneDisplayLogicSpy.swift
 - MySceneViewControllerTests.swift
 
+- MySceneRouter.swift
+- MySceneRouterSpy.swift
+- MySceneRouterTests.swift
+
 You can see the generated code from the example above in the [Generated](Generated) folder of this repo. The files were generated using Sourcery installed via Homebrew using the following cli command:
 
 `sourcery --sources ./ExampleSource --templates ./Template --output ./Generated`
