@@ -2,17 +2,18 @@
 // DO NOT EDIT
 
 protocol MyScenePresentationLogic {
-  func presentEmail(response: MyScene.EnterEmail.Response)
-  func presentPassword(response: MyScene.EnterPassword.Response)
+    func presentEmail(response: MyScene.EnterEmail.Response)
+    func presentPassword(response: MyScene.EnterPassword.Response)
 }
 
 final class MyScenePresenter: MyScenePresentationLogic {
-  var view: MySceneDisplayLogic?
+    var view: MySceneDisplayLogic?
 
-  func presentEmail(response: MyScene.EnterEmail.Response) {
-      view?.displayEmail(viewModel: .init())
-  } 
-  func presentPassword(response: MyScene.EnterPassword.Response) {
-      view?.displayPassword(viewModel: .init())
-  } 
+    func presentEmail(response: MyScene.EnterEmail.Response) {
+        view?.displayEmail(viewModel: .init())
+    } 
+
+    func presentPassword(response: MyScene.EnterPassword.Response) {
+        view?.displayPassword(viewModel: .init())
+    } 
 }

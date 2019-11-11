@@ -4,7 +4,7 @@
 import XCTest
 
 final class MySceneViewControllerTests: XCTestCase {
-  private let interactorSpy = MySceneBusinessLogicSpy()
-  private lazy var sut = MySceneViewController(interactor: interactorSpy)
+    private let interactorSpy = MySceneBusinessLogicSpy()
+    private lazy var sut = MySceneViewController(interactor: interactorSpy)
 
 }

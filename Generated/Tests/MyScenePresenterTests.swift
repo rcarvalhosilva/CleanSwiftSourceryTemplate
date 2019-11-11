@@ -4,22 +4,22 @@
 import XCTest
 
 final class MyScenePresenterTests: XCTestCase {
-  private let viewSpy = MySceneDisplayLogicSpy()
-  private let sut = MyScenePresenter()
+    private let viewSpy = MySceneDisplayLogicSpy()
+    private lazy var sut = {
+        let presenter = MyScenePresenter()
+        presenter.view = viewSpy
+        return presenter
+    }()
 
-  override func setUp() {
-    sut.view = viewSpy
-  }
+    func test_presentEmail_callsViewDisplayEmail() {
+        sut.presentEmail(response: .init())
 
-  func test_presentEmail_callsViewDisplayEmail() {
-    sut.presentEmail(response: .init())
+        XCTAssertTrue(viewSpy.displayEmailCalled)
+    }
 
-    XCTAssertTrue(viewSpy.displayEmailCalled)
-  }
+    func test_presentPassword_callsViewDisplayPassword() {
+        sut.presentPassword(response: .init())
 
-  func test_presentPassword_callsViewDisplayPassword() {
-    sut.presentPassword(response: .init())
-
-    XCTAssertTrue(viewSpy.displayPasswordCalled)
-  }
+        XCTAssertTrue(viewSpy.displayPasswordCalled)
+    }
 }

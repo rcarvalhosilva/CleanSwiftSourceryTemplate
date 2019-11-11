@@ -4,18 +4,18 @@
 import XCTest
 
 final class MySceneInteractorTests: XCTestCase {
-  private let presenterSpy = MyScenePresentationLogicSpy()
-  private lazy var sut = MySceneInteractor(presenter: presenterSpy)
+    private let presenterSpy = MyScenePresentationLogicSpy()
+    private lazy var sut = MySceneInteractor(presenter: presenterSpy)
 
-  func test_fillEmail_callsPresenterPresentEmail() {
-    sut.fillEmail(request: .init())
+    func test_fillEmail_callsPresenterPresentEmail() {
+        sut.fillEmail(request: .init())
 
-    XCTAssertTrue(presenterSpy.presentEmailCalled)
-  }
+        XCTAssertTrue(presenterSpy.presentEmailCalled)
+    }
 
-  func test_fillPassword_callsPresenterPresentPassword() {
-    sut.fillPassword(request: .init())
+    func test_fillPassword_callsPresenterPresentPassword() {
+        sut.fillPassword(request: .init())
 
-    XCTAssertTrue(presenterSpy.presentPasswordCalled)
-  }
+        XCTAssertTrue(presenterSpy.presentPasswordCalled)
+    }
 }

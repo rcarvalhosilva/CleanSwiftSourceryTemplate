@@ -1,11 +1,14 @@
 {% macro interactorUseCases implemented %}
 {% for useCase in type.containedTypes %}
 {% for requestType in useCase.containedTypes where requestType.localName == "Request" and requestType|annotated:"method" %}
-  func {{requestType.annotations.method}}(request: {{ requestType.name }}){% if implemented %} {
-    {% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
-      presenter.{{responseType.annotations.method}}(response: .init())
-    {% endfor %}
-  } {% endif %}
+{% if implemented %}
+
+{% endif %}
+    func {{requestType.annotations.method}}(request: {{ requestType.name }}){% if implemented %} {
+        {% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
+        presenter.{{responseType.annotations.method}}(response: .init())
+        {% endfor %}
+    } {% endif %}
 {% endfor %}
 {% endfor %}
 {% endmacro %}
@@ -14,12 +17,12 @@
 {% for useCase in type.containedTypes %}
 {% for requestType in useCase.containedTypes where requestType.localName == "Request" and requestType|annotated:"method" %}
 
-  private(set) var {{requestType.annotations.method}}Called = false
-  private(set) var {{requestType.annotations.method}}RequestPassed: {{ requestType.name }}?
-  func {{requestType.annotations.method}}(request: {{ requestType.name }}) {
-    {{requestType.annotations.method}}Called = true
-    {{requestType.annotations.method}}RequestPassed = request
-  }
+    private(set) var {{requestType.annotations.method}}Called = false
+    private(set) var {{requestType.annotations.method}}RequestPassed: {{ requestType.name }}?
+    func {{requestType.annotations.method}}(request: {{ requestType.name }}) {
+        {{requestType.annotations.method}}Called = true
+        {{requestType.annotations.method}}RequestPassed = request
+    }
 {% endfor %}
 {% endfor %}
 {% endmacro %}
@@ -29,11 +32,11 @@
 {% for requestType in useCase.containedTypes where requestType.localName == "Request" and requestType|annotated:"method" %}
 {% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
 
-  func test_{{requestType.annotations.method}}_callsPresenter{{responseType.annotations.method|upperFirstLetter}}() {
-    sut.{{requestType.annotations.method}}(request: .init())
+    func test_{{requestType.annotations.method}}_callsPresenter{{responseType.annotations.method|upperFirstLetter}}() {
+        sut.{{requestType.annotations.method}}(request: .init())
 
-    XCTAssertTrue(presenterSpy.{{responseType.annotations.method}}Called)
-  }
+        XCTAssertTrue(presenterSpy.{{responseType.annotations.method}}Called)
+    }
 {% endfor %}
 {% endfor %}
 {% endfor %}
@@ -42,11 +45,14 @@
 {% macro presenterUseCases implemented %}
 {% for useCase in type.containedTypes %}
 {% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
-  func {{responseType.annotations.method}}(response: {{ responseType.name }}){% if implemented %} {
-    {% for viewModelType in useCase.containedTypes where viewModelType.localName == "ViewModel" and viewModelType|annotated:"method" %}
-      view?.{{viewModelType.annotations.method}}(viewModel: .init())
-    {% endfor %}
-  } {% endif %}
+{% if implemented %}
+
+{% endif %}
+    func {{responseType.annotations.method}}(response: {{ responseType.name }}){% if implemented %} {
+        {% for viewModelType in useCase.containedTypes where viewModelType.localName == "ViewModel" and viewModelType|annotated:"method" %}
+        view?.{{viewModelType.annotations.method}}(viewModel: .init())
+        {% endfor %}
+    } {% endif %}
 {% endfor %}
 {% endfor %}
 {% endmacro %}
@@ -56,11 +62,11 @@
 {% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
 {% for viewModelType in useCase.containedTypes where viewModelType.localName == "ViewModel" and viewModelType|annotated:"method" %}
 
-  func test_{{responseType.annotations.method}}_callsView{{viewModelType.annotations.method|upperFirstLetter}}() {
-    sut.{{responseType.annotations.method}}(response: .init())
+    func test_{{responseType.annotations.method}}_callsView{{viewModelType.annotations.method|upperFirstLetter}}() {
+        sut.{{responseType.annotations.method}}(response: .init())
 
-    XCTAssertTrue(viewSpy.{{viewModelType.annotations.method}}Called)
-  }
+        XCTAssertTrue(viewSpy.{{viewModelType.annotations.method}}Called)
+    }
 {% endfor %}
 {% endfor %}
 {% endfor %}
@@ -70,12 +76,12 @@
 {% for useCase in type.containedTypes %}
 {% for responseType in useCase.containedTypes where responseType.localName == "Response" and responseType|annotated:"method" %}
 
-  private(set) var {{responseType.annotations.method}}Called = false
-  private(set) var {{responseType.annotations.method}}ResponsePassed: {{ responseType.name }}?
-  func {{responseType.annotations.method}}(response: {{ responseType.name }}) {
-    {{responseType.annotations.method}}Called = true
-    {{responseType.annotations.method}}ResponsePassed = response
-  }
+    private(set) var {{responseType.annotations.method}}Called = false
+    private(set) var {{responseType.annotations.method}}ResponsePassed: {{ responseType.name }}?
+    func {{responseType.annotations.method}}(response: {{ responseType.name }}) {
+        {{responseType.annotations.method}}Called = true
+        {{responseType.annotations.method}}ResponsePassed = response
+    }
 {% endfor %}
 {% endfor %}
 {% endmacro %}
@@ -83,7 +89,10 @@
 {% macro viewUseCases implemented %}
 {% for useCase in type.containedTypes %}
 {% for viewModel in useCase.containedTypes where viewModel.localName == "ViewModel" and viewModel|annotated:"method" %}
-  func {{viewModel.annotations.method}}(viewModel: {{ viewModel.name }}){% if implemented %} {} {% endif %}
+{% if implemented %}
+
+{% endif %}
+    func {{viewModel.annotations.method}}(viewModel: {{ viewModel.name }}){% if implemented %} {} {% endif %}
 {% endfor %}
 {% endfor %}
 {% endmacro %}
@@ -92,12 +101,12 @@
 {% for useCase in type.containedTypes %}
 {% for viewModel in useCase.containedTypes where viewModel.localName == "ViewModel" and viewModel|annotated:"method" %}
 
-  private(set) var {{viewModel.annotations.method}}Called = false
-  private(set) var {{viewModel.annotations.method}}ViewModelPassed: {{ viewModel.name }}?
-  func {{viewModel.annotations.method}}(viewModel: {{ viewModel.name }}) {
-    {{viewModel.annotations.method}}Called = true
-    {{viewModel.annotations.method}}ViewModelPassed = viewModel
-  }
+    private(set) var {{viewModel.annotations.method}}Called = false
+    private(set) var {{viewModel.annotations.method}}ViewModelPassed: {{ viewModel.name }}?
+    func {{viewModel.annotations.method}}(viewModel: {{ viewModel.name }}) {
+        {{viewModel.annotations.method}}Called = true
+        {{viewModel.annotations.method}}ViewModelPassed = viewModel
+    }
 {% endfor %}
 {% endfor %}
 {% endmacro %}
@@ -107,23 +116,22 @@
 {% for type in types.based.Scene where type.isExtension == false %}
 // sourcery:file:Source/{{ type.name }}Interactor.swift
 protocol {{ type.name }}BusinessLogic {
-  {% call interactorUseCases false%}
+    {% call interactorUseCases false%}
 }
 
 final class {{ type.name }}Interactor: {{ type.name }}BusinessLogic {
-  private let presenter: {{ type.name }}PresentationLogic
+    private let presenter: {{ type.name }}PresentationLogic
 
-  init(presenter: {{ type.name }}PresentationLogic) {
-    self.presenter = presenter
-  }
-
-  {% call interactorUseCases true%}
+    init(presenter: {{ type.name }}PresentationLogic) {
+      self.presenter = presenter
+    }
+    {% call interactorUseCases true%}
 }
 // sourcery:end
 
 // sourcery:file:Spies/{{ type.name }}BusinessLogicSpy.swift
 final class {{ type.name }}BusinessLogicSpy: {{ type.name }}BusinessLogic {
-  {% call interactorSpyBody %}
+    {% call interactorSpyBody %}
 }
 // sourcery:end
 
@@ -131,21 +139,20 @@ final class {{ type.name }}BusinessLogicSpy: {{ type.name }}BusinessLogic {
 import XCTest
 
 final class {{ type.name }}InteractorTests: XCTestCase {
-  private let presenterSpy = {{ type.name }}PresentationLogicSpy()
-  private lazy var sut = {{ type.name }}Interactor(presenter: presenterSpy)
-  {% call interactorTestsBody %}
+    private let presenterSpy = {{ type.name }}PresentationLogicSpy()
+    private lazy var sut = {{ type.name }}Interactor(presenter: presenterSpy)
+    {% call interactorTestsBody %}
 }
 // sourcery:end
 
 // sourcery:file:Source/{{ type.name }}Presenter.swift
 protocol {{ type.name }}PresentationLogic {
-  {% call presenterUseCases false%}
+    {% call presenterUseCases false%}
 }
 
 final class {{ type.name }}Presenter: {{ type.name }}PresentationLogic {
-  var view: {{ type.name }}DisplayLogic?
-
-  {% call presenterUseCases true%}
+    var view: {{ type.name }}DisplayLogic?
+    {% call presenterUseCases true%}
 }
 // sourcery:end
 
@@ -153,19 +160,19 @@ final class {{ type.name }}Presenter: {{ type.name }}PresentationLogic {
 import XCTest
 
 final class {{ type.name }}PresenterTests: XCTestCase {
-  private let viewSpy = {{ type.name }}DisplayLogicSpy()
-  private let sut = {{ type.name }}Presenter()
-
-  override func setUp() {
-    sut.view = viewSpy
-  }
-  {% call presenterTestsBody %}
+    private let viewSpy = {{ type.name }}DisplayLogicSpy()
+    private lazy var sut = {
+        let presenter = {{ type.name }}Presenter()
+        presenter.view = viewSpy
+        return presenter
+    }()
+    {% call presenterTestsBody %}
 }
 // sourcery:end
 
 // sourcery:file:Spies/{{ type.name }}PresentationLogicSpy.swift
 final class {{ type.name }}PresentationLogicSpy: {{ type.name }}PresentationLogic {
-  {% call presenterSpyBody %}
+    {% call presenterSpyBody %}
 }
 // sourcery:end
 
@@ -173,18 +180,17 @@ final class {{ type.name }}PresentationLogicSpy: {{ type.name }}PresentationLogi
 import UIKit
 
 protocol {{ type.name }}DisplayLogic {
-  {% call viewUseCases false%}
+    {% call viewUseCases false%}
 }
 
 final class {{ type.name }}ViewController: UIViewController, {{ type.name }}DisplayLogic {
-  private let interactor: {{ type.name }}BusinessLogic
+    private let interactor: {{ type.name }}BusinessLogic
 
-  init(interactor: {{ type.name }}BusinessLogic) {
-    self.interactor = interactor
-    super.init(nibName: nil, bundle: nil)
-  }
-
-  {% call viewUseCases true%}
+    init(interactor: {{ type.name }}BusinessLogic) {
+        self.interactor = interactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    {% call viewUseCases true%}
 }
 // sourcery:end
 
@@ -192,16 +198,44 @@ final class {{ type.name }}ViewController: UIViewController, {{ type.name }}Disp
 import XCTest
 
 final class {{ type.name }}ViewControllerTests: XCTestCase {
-  private let interactorSpy = {{ type.name }}BusinessLogicSpy()
-  private lazy var sut = {{ type.name }}ViewController(interactor: interactorSpy)
+    private let interactorSpy = {{ type.name }}BusinessLogicSpy()
+    private lazy var sut = {{ type.name }}ViewController(interactor: interactorSpy)
 
 }
 // sourcery:end
 
 // sourcery:file:Spies/{{ type.name }}DisplayLogicSpy.swift
 final class {{ type.name }}DisplayLogicSpy: {{ type.name }}DisplayLogic {
-  {% call viewSpyBody %}
+    {% call viewSpyBody %}
 }
+// sourcery:end
+
+// sourcery:file:Source/{{ type.name }}Router.swift
+protocol {{ type.name }}RoutingLogic {}
+
+final class {{ type.name }}Router: {{ type.name }}RoutingLogic {
+    var view: {{ type.name }}ViewController?
+}
+// sourcery:end
+
+// sourcery:file:Spies/{{ type.name }}RoutingLogicSpy.swift
+
+final class {{ type.name }}RoutingLogicSpy: {{ type.name }}RoutingLogic {
+}
+// sourcery:end
+
+// sourcery:file:Tests/{{ type.name }}RouterTests.swift
+import XCTest
+
+final class {{ type.name }}RouterTests: XCTestCase {
+    private let viewSpy = {{ type.name }}DisplayLogicSpy()
+    private lazy var sut = {
+        let router = {{ type.name }}Router()
+        router.view = viewSpy
+        return router
+    }()
+}
+
 // sourcery:end
 
 {% endfor %}

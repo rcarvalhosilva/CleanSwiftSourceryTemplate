@@ -4,18 +4,19 @@
 import UIKit
 
 protocol MySceneDisplayLogic {
-  func displayEmail(viewModel: MyScene.EnterEmail.ViewModel)
-  func displayPassword(viewModel: MyScene.EnterPassword.ViewModel)
+    func displayEmail(viewModel: MyScene.EnterEmail.ViewModel)
+    func displayPassword(viewModel: MyScene.EnterPassword.ViewModel)
 }
 
 final class MySceneViewController: UIViewController, MySceneDisplayLogic {
-  private let interactor: MySceneBusinessLogic
+    private let interactor: MySceneBusinessLogic
 
-  init(interactor: MySceneBusinessLogic) {
-    self.interactor = interactor
-    super.init(nibName: nil, bundle: nil)
-  }
+    init(interactor: MySceneBusinessLogic) {
+        self.interactor = interactor
+        super.init(nibName: nil, bundle: nil)
+    }
 
-  func displayEmail(viewModel: MyScene.EnterEmail.ViewModel) {} 
-  func displayPassword(viewModel: MyScene.EnterPassword.ViewModel) {} 
+    func displayEmail(viewModel: MyScene.EnterEmail.ViewModel) {} 
+
+    func displayPassword(viewModel: MyScene.EnterPassword.ViewModel) {} 
 }
