@@ -171,7 +171,7 @@ protocol {{ type.name }}BusinessLogic: AnyObject {
     {% call interactorUseCases false%}
 }
 
-final class {{ type.name }}Interactor  {
+final class {{ type.name }}Interactor {
     let router: {{ type.name }}RoutingLogic
     let presenter: {{ type.name }}PresentationLogic
 
