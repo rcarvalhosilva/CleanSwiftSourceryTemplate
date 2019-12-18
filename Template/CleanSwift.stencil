@@ -307,6 +307,13 @@ import FBSnapshotTestCase
 
 final class {{ type.name }}ViewTests: FBSnapshotTestCase {
     private lazy var sut = {{ type.name }}View()
+
+    func test_setup_shoudLayoutViewsCorrectly() {
+        deviceSizes.forEach { device, size in
+            sut.frame = CGRect(origin: .zero, size: size)
+            FBSnapshotVerifyView(sut, identifier: "\(device)")
+        }
+    }
 }
 // sourcery:end
 
