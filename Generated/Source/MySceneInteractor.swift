@@ -1,17 +1,25 @@
 // Generated using Sourcery 0.17.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
-protocol MySceneBusinessLogic {
+protocol MySceneBusinessLogic: AnyObject {
     func fillEmail(request: MyScene.EnterEmail.Request)
     func fillPassword(request: MyScene.EnterPassword.Request)
 }
 
-final class MySceneInteractor: MySceneBusinessLogic {
-    private let presenter: MyScenePresentationLogic
+final class MySceneInteractor  {
+    let router: MySceneRoutingLogic
+    let presenter: MyScenePresentationLogic
 
-    init(presenter: MyScenePresentationLogic) {
+    init(
+        router: MySceneRoutingLogic,
+        presenter: MyScenePresentationLogic
+    ) {
+      self.router = router
       self.presenter = presenter
     }
+}
+
+extension MySceneInteractor: MySceneBusinessLogic {
 
     func fillEmail(request: MyScene.EnterEmail.Request) {
         presenter.presentEmail(response: .init())

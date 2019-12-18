@@ -4,5 +4,5 @@
 protocol MySceneRoutingLogic {}
 
 final class MySceneRouter: MySceneRoutingLogic {
-    var view: MySceneViewController?
+    weak var viewController: MySceneDisplayLogic?
 }

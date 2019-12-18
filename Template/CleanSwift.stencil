@@ -114,19 +114,80 @@
 
 
 {% for type in types.based.Scene where type.isExtension == false %}
+// sourcery:file:Source/{{ type.name }}Configurator.swift
+import UIKit
+
+final class {{ type.name }}Configurator {
+    func resolve() -> UIViewController {
+        let router = {{ type.name }}Router()
+        let presenter = {{ type.name }}Presenter()
+        let interactor = {{ type.name }}Interactor(
+            router: router,
+            presenter: presenter
+        )
+        let view = {{ type.name }}View()
+        let viewController = {{ type.name }}ViewController(
+            interactor: interactor,
+            view: view
+        )
+
+        presenter.view = viewController
+        router.viewController = viewController
+
+        return viewController
+    }
+}
+// sourcery:end
+
+// sourcery:file:Tests/{{ type.name }}ConfiguratorTests.swift
+import XCTest
+
+final class {{ type.name }}ConfiguratorTests: XCTestCase {
+    private let sut = {{ type.name }}Configurator()
+
+    func test_configurator_closesVipCycleWithNoRetainCycle() {
+        var viewController = sut.resolve() as? {{ type.name }}ViewController
+
+        XCTAssertNotNil(viewController)
+
+        let interactor = viewController?.interactor as? {{ type.name }}Interactor
+        let presenter = interactor?.presenter as? {{ type.name }}Presenter
+        let router = interactor?.router as? {{ type.name }}Router
+
+        XCTAssertNotNil(interactor)
+        XCTAssertNotNil(presenter)
+        XCTAssertNotNil(router)
+        XCTAssertTrue(presenter?.view === viewController)
+
+        viewController = nil
+
+        XCTAssertNil(presenter?.view)
+    }
+}
+// sourcery:end
+
 // sourcery:file:Source/{{ type.name }}Interactor.swift
-protocol {{ type.name }}BusinessLogic {
+protocol {{ type.name }}BusinessLogic: AnyObject {
     {% call interactorUseCases false%}
 }
 
-final class {{ type.name }}Interactor: {{ type.name }}BusinessLogic {
-    private let presenter: {{ type.name }}PresentationLogic
+final class {{ type.name }}Interactor  {
+    let router: {{ type.name }}RoutingLogic
+    let presenter: {{ type.name }}PresentationLogic
 
-    init(presenter: {{ type.name }}PresentationLogic) {
+    init(
+        router: {{ type.name }}RoutingLogic,
+        presenter: {{ type.name }}PresentationLogic
+    ) {
+      self.router = router
       self.presenter = presenter
     }
+}
+
+extension {{ type.name }}Interactor: {{ type.name }}BusinessLogic {
     {% call interactorUseCases true%}
 }
+
 // sourcery:end
 
 // sourcery:file:Spies/{{ type.name }}BusinessLogicSpy.swift
@@ -140,18 +201,19 @@ import XCTest
 
 final class {{ type.name }}InteractorTests: XCTestCase {
     private let presenterSpy = {{ type.name }}PresentationLogicSpy()
-    private lazy var sut = {{ type.name }}Interactor(presenter: presenterSpy)
+    private let routerSpy = {{ type.name }}RoutingLogicSpy()
+    private lazy var sut = {{ type.name }}Interactor(router: routerSpy, presenter: presenterSpy)
     {% call interactorTestsBody %}
 }
 // sourcery:end
 
 // sourcery:file:Source/{{ type.name }}Presenter.swift
-protocol {{ type.name }}PresentationLogic {
+protocol {{ type.name }}PresentationLogic: AnyObject {
     {% call presenterUseCases false%}
 }
 
 final class {{ type.name }}Presenter: {{ type.name }}PresentationLogic {
-    var view: {{ type.name }}DisplayLogic?
+    weak var view: {{ type.name }}DisplayLogic?
     {% call presenterUseCases true%}
 }
 // sourcery:end
@@ -161,7 +223,7 @@ import XCTest
 
 final class {{ type.name }}PresenterTests: XCTestCase {
     private let viewSpy = {{ type.name }}DisplayLogicSpy()
-    private lazy var sut = {
+    private lazy var sut: {{ type.name }}Presenter = {
         let presenter = {{ type.name }}Presenter()
         presenter.view = viewSpy
         return presenter
@@ -179,22 +241,83 @@ final class {{ type.name }}PresentationLogicSpy: {{ type.name }}PresentationLogi
 // sourcery:file:Source/{{ type.name }}ViewController.swift
 import UIKit
 
-protocol {{ type.name }}DisplayLogic {
+protocol {{ type.name }}DisplayLogic: AnyObject {
     {% call viewUseCases false%}
 }
 
 final class {{ type.name }}ViewController: UIViewController, {{ type.name }}DisplayLogic {
-    private let interactor: {{ type.name }}BusinessLogic
+    let interactor: {{ type.name }}BusinessLogic
+    private let customView: {{ type.name }}Display
 
-    init(interactor: {{ type.name }}BusinessLogic) {
+    init(
+      interactor: {{ type.name }}BusinessLogic,
+      view: {{ type.name }}Display
+    ) {
         self.interactor = interactor
+        self.customView = view
         super.init(nibName: nil, bundle: nil)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return nil
+    }
+
+    override func loadView() {
+        self.view = customView
     }
     {% call viewUseCases true%}
+}
+// sourcery:end
+
+// sourcery:file:Source/{{ type.name }}View.swift
+import Cartography
+import CommonColors
+import UI
+import UIKit
+
+protocol {{ type.name }}Display: UIView, StatefulObject {
+}
+
+final class {{ type.name }}View: UIView {
+    var currentState: State?
+
+    init() {
+        super.init(frame: .zero)
+        setup()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        return nil
+    }
+
+    private func setup() {
+        backgroundColor = DesignSystem.white.color
+    }
+}
+
+extension {{ type.name }}View: {{ type.name }}Display {
+    func adapt(toState state: State, animated: Bool) {}
+}
+// sourcery:end
+
+// sourcery:file:Tests/{{ type.name }}ViewTests.swift
+import FBSnapshotTestCase
+
+final class {{ type.name }}ViewTests: FBSnapshotTestCase {
+    private lazy var sut = {{ type.name }}View()
+}
+// sourcery:end
+
+// sourcery:file:Spies/{{ type.name }}DisplaySpy.swift
+import UI
+import UIKit
+
+final class {{ type.name }}DisplaySpy: UIView, {{ type.name }}Display, StatefulObject {
+    var currentState: State?
+
+    func adapt(toState state: State, animated: Bool) {}
 }
 // sourcery:end
 
@@ -203,8 +326,8 @@ import XCTest
 
 final class {{ type.name }}ViewControllerTests: XCTestCase {
     private let interactorSpy = {{ type.name }}BusinessLogicSpy()
-    private lazy var sut = {{ type.name }}ViewController(interactor: interactorSpy)
-
+    private let viewSpy = {{ type.name }}DisplaySpy()
+    private lazy var sut = {{ type.name }}ViewController(interactor: interactorSpy, view: viewSpy)
 }
 // sourcery:end
 
@@ -218,7 +341,7 @@ final class {{ type.name }}DisplayLogicSpy: {{ type.name }}DisplayLogic {
 protocol {{ type.name }}RoutingLogic {}
 
 final class {{ type.name }}Router: {{ type.name }}RoutingLogic {
-    var view: {{ type.name }}ViewController?
+    weak var viewController: {{ type.name }}DisplayLogic?
 }
 // sourcery:end
 
@@ -232,10 +355,10 @@ final class {{ type.name }}RoutingLogicSpy: {{ type.name }}RoutingLogic {
 import XCTest
 
 final class {{ type.name }}RouterTests: XCTestCase {
-    private let viewSpy = {{ type.name }}DisplayLogicSpy()
-    private lazy var sut = {
+    private let viewSpy = {{ type.name }}DisplaySpy()
+    private lazy var sut: {{ type.name }}Router = {
         let router = {{ type.name }}Router()
-        router.view = viewSpy
+        router.viewController = viewSpy
         return router
     }()
 }

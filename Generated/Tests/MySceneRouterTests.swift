@@ -4,10 +4,10 @@
 import XCTest
 
 final class MySceneRouterTests: XCTestCase {
-    private let viewSpy = MySceneDisplayLogicSpy()
-    private lazy var sut = {
+    private let viewSpy = MySceneDisplaySpy()
+    private lazy var sut: MySceneRouter = {
         let router = MySceneRouter()
-        router.view = viewSpy
+        router.viewController = viewSpy
         return router
     }()
 }

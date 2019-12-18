@@ -5,7 +5,8 @@ import XCTest
 
 final class MySceneInteractorTests: XCTestCase {
     private let presenterSpy = MyScenePresentationLogicSpy()
-    private lazy var sut = MySceneInteractor(presenter: presenterSpy)
+    private let routerSpy = MySceneRoutingLogicSpy()
+    private lazy var sut = MySceneInteractor(router: routerSpy, presenter: presenterSpy)
 
     func test_fillEmail_callsPresenterPresentEmail() {
         sut.fillEmail(request: .init())
