@@ -9,7 +9,7 @@ Just follow the steps in the Sourcery Github page to install it and the usage fo
 
 The template makes use of a marker protocol called `Scene` and a annotation `method`. Since this template is meant to be run one time just to create the files you can remove the protocol and the annotation from your source code. *You dont have to declare the protocol!*
 
-Given a scene use case models file like the following:
+Create a file with scene use case models like the following:
 
 ```Swift
 enum MyScene {
@@ -39,7 +39,11 @@ enum MyScene {
 extension MyScene: Scene {}
 ```
 
-when you run sourcery with the this template it will create the following files:
+Then run sourcery with the following command replacing the paths to your preference:
+
+`sourcery --sources ./ExampleSourcePath --templates ./Template --output ./GeneratedFilesPath --args module=MyModule`
+
+This example code will create the following files:
 - MySceneInteractor.swift
 - MySceneBusinessLogicSpy.swift
 - MySceneInteractorTests.swift
@@ -52,19 +56,24 @@ when you run sourcery with the this template it will create the following files:
 - MySceneDisplayLogicSpy.swift
 - MySceneViewControllerTests.swift
 
+- MySceneView.swift
+- MySceneDisplaySpy.swift
+- MySceneViewTests.swift
+
 - MySceneRouter.swift
-- MySceneRouterSpy.swift
+- MySceneRoutingLogicSpy.swift
 - MySceneRouterTests.swift
 
-You can see the generated code from the example above in the [Generated](Generated) folder of this repo. The files were generated using Sourcery installed via Homebrew using the following cli command:
+- MySceneConfigurator.swift
+- MySceneConfiguratorTests.swift
 
-`sourcery --sources ./ExampleSource --templates ./Template --output ./Generated`
+You can see the generated code from the example above in the [Generated](Generated) folder of this repo.
 
-Don't forget to add `@testable import <YourTarget>` inside your tests and spy files
+After generation remove the comments and the Scene protocol marker and move the files to their correct folder and you're ready to go! The VIP cycles will be already tested to a faster kickoff.
 
 ## License
 
-Sourcery is available under the MIT license. See [LICENSE](LICENSE) for more information.
+CleanSwiftSourceryTemplate is available under the MIT license. See [LICENSE](LICENSE) for more information.
 
 You can [follow me on Twitter][1]
 

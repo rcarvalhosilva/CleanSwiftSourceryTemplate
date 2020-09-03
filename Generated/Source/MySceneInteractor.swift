@@ -6,9 +6,9 @@ protocol MySceneBusinessLogic: AnyObject {
     func fillPassword(request: MyScene.EnterPassword.Request)
 }
 
-final class MySceneInteractor  {
-    let router: MySceneRoutingLogic
-    let presenter: MyScenePresentationLogic
+final class MySceneInteractor {
+    private let router: MySceneRoutingLogic
+    private let presenter: MyScenePresentationLogic
 
     init(
         router: MySceneRoutingLogic,

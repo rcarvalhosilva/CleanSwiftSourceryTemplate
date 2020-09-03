@@ -88,11 +88,32 @@
 
 {% macro viewUseCases implemented %}
 {% for useCase in type.containedTypes %}
+{% if implemented %}
+{% for requestType in useCase.containedTypes where requestType.localName == "Request" and requestType|annotated:"method" %}
+
+    func {{requestType.annotations.method}}() {
+        interactor.{{requestType.annotations.method}}(request: .init())
+    }
+{% endfor %}
+{% endif %}
 {% for viewModel in useCase.containedTypes where viewModel.localName == "ViewModel" and viewModel|annotated:"method" %}
 {% if implemented %}
 
 {% endif %}
     func {{viewModel.annotations.method}}(viewModel: {{ viewModel.name }}){% if implemented %} {} {% endif %}
+{% endfor %}
+{% endfor %}
+{% endmacro %}
+
+{% macro viewControllerTestsBody %}
+{% for useCase in type.containedTypes %}
+{% for requestType in useCase.containedTypes where requestType.localName == "Request" and requestType|annotated:"method" %}
+
+    func test_{{requestType.annotations.method}}_callsInteractor{{requestType.annotations.method|upperFirstLetter}}() {
+        sut.{{requestType.annotations.method}}()
+
+        XCTAssertTrue(interactorSpy.{{requestType.annotations.method}}Called)
+    }
 {% endfor %}
 {% endfor %}
 {% endmacro %}
@@ -142,26 +163,15 @@ final class {{ type.name }}Configurator {
 // sourcery:file:Tests/{{ type.name }}ConfiguratorTests.swift
 import XCTest
 
+@testable import {{ argument.module }}
+
 final class {{ type.name }}ConfiguratorTests: XCTestCase {
     private let sut = {{ type.name }}Configurator()
 
-    func test_configurator_closesVipCycleWithNoRetainCycle() {
-        var viewController = sut.resolve() as? {{ type.name }}ViewController
+    func test_resolve_returnsCorrectViewController() {
+        let viewController = sut.resolve() as? {{ type.name }}ViewController
 
-        XCTAssertNotNil(viewController)
-
-        let interactor = viewController?.interactor as? {{ type.name }}Interactor
-        let presenter = interactor?.presenter as? {{ type.name }}Presenter
-        let router = interactor?.router as? {{ type.name }}Router
-
-        XCTAssertNotNil(interactor)
-        XCTAssertNotNil(presenter)
-        XCTAssertNotNil(router)
-        XCTAssertTrue(presenter?.view === viewController)
-
-        viewController = nil
-
-        XCTAssertNil(presenter?.view)
+        XCTAssertTrue(viewController is {{ type.name }}ViewController)
     }
 }
 // sourcery:end
@@ -172,8 +182,8 @@ protocol {{ type.name }}BusinessLogic: AnyObject {
 }
 
 final class {{ type.name }}Interactor {
-    let router: {{ type.name }}RoutingLogic
-    let presenter: {{ type.name }}PresentationLogic
+    private let router: {{ type.name }}RoutingLogic
+    private let presenter: {{ type.name }}PresentationLogic
 
     init(
         router: {{ type.name }}RoutingLogic,
@@ -190,7 +200,9 @@ extension {{ type.name }}Interactor: {{ type.name }}BusinessLogic {
 
 // sourcery:end
 
-// sourcery:file:Spies/{{ type.name }}BusinessLogicSpy.swift
+// sourcery:file:Doubles/{{ type.name }}BusinessLogicSpy.swift
+@testable import {{ argument.module }}
+
 final class {{ type.name }}BusinessLogicSpy: {{ type.name }}BusinessLogic {
     {% call interactorSpyBody %}
 }
@@ -198,6 +210,8 @@ final class {{ type.name }}BusinessLogicSpy: {{ type.name }}BusinessLogic {
 
 // sourcery:file:Tests/{{ type.name }}InteractorTests.swift
 import XCTest
+
+@testable import {{ argument.module }}
 
 final class {{ type.name }}InteractorTests: XCTestCase {
     private let presenterSpy = {{ type.name }}PresentationLogicSpy()
@@ -221,6 +235,8 @@ final class {{ type.name }}Presenter: {{ type.name }}PresentationLogic {
 // sourcery:file:Tests/{{ type.name }}PresenterTests.swift
 import XCTest
 
+@testable import {{ argument.module }}
+
 final class {{ type.name }}PresenterTests: XCTestCase {
     private let viewSpy = {{ type.name }}DisplayLogicSpy()
     private lazy var sut: {{ type.name }}Presenter = {
@@ -232,7 +248,9 @@ final class {{ type.name }}PresenterTests: XCTestCase {
 }
 // sourcery:end
 
-// sourcery:file:Spies/{{ type.name }}PresentationLogicSpy.swift
+// sourcery:file:Doubles/{{ type.name }}PresentationLogicSpy.swift
+@testable import {{ argument.module }}
+
 final class {{ type.name }}PresentationLogicSpy: {{ type.name }}PresentationLogic {
     {% call presenterSpyBody %}
 }
@@ -246,7 +264,7 @@ protocol {{ type.name }}DisplayLogic: AnyObject {
 }
 
 final class {{ type.name }}ViewController: UIViewController, {{ type.name }}DisplayLogic {
-    let interactor: {{ type.name }}BusinessLogic
+    private let interactor: {{ type.name }}BusinessLogic
     private let customView: {{ type.name }}Display
 
     init(
@@ -305,21 +323,25 @@ extension {{ type.name }}View: {{ type.name }}Display {
 // sourcery:file:Tests/{{ type.name }}ViewTests.swift
 import FBSnapshotTestCase
 
+@testable import {{ argument.module }}
+
 final class {{ type.name }}ViewTests: FBSnapshotTestCase {
     private lazy var sut = {{ type.name }}View()
 
     func test_setup_shoudLayoutViewsCorrectly() {
         deviceSizes.forEach { device, size in
             sut.frame = CGRect(origin: .zero, size: size)
-            FBSnapshotVerifyView(sut, identifier: "\(device)")
+            FBSnapshotVerifyView(sut, identifier: "\(device)", perPixelTolerance: 0.01)
         }
     }
 }
 // sourcery:end
 
-// sourcery:file:Spies/{{ type.name }}DisplaySpy.swift
+// sourcery:file:Doubles/{{ type.name }}DisplaySpy.swift
 import UI
 import UIKit
+
+@testable import {{ argument.module }}
 
 final class {{ type.name }}DisplaySpy: UIView, {{ type.name }}Display, StatefulObject {
     var currentState: State?
@@ -331,41 +353,52 @@ final class {{ type.name }}DisplaySpy: UIView, {{ type.name }}Display, StatefulO
 // sourcery:file:Tests/{{ type.name }}ViewControllerTests.swift
 import XCTest
 
+@testable import {{ argument.module }}
+
 final class {{ type.name }}ViewControllerTests: XCTestCase {
     private let interactorSpy = {{ type.name }}BusinessLogicSpy()
     private let viewSpy = {{ type.name }}DisplaySpy()
     private lazy var sut = {{ type.name }}ViewController(interactor: interactorSpy, view: viewSpy)
+    {% call viewControllerTestsBody %}
 }
 // sourcery:end
 
-// sourcery:file:Spies/{{ type.name }}DisplayLogicSpy.swift
+// sourcery:file:Doubles/{{ type.name }}DisplayLogicSpy.swift
+@testable import {{ argument.module }}
+
 final class {{ type.name }}DisplayLogicSpy: {{ type.name }}DisplayLogic {
     {% call viewSpyBody %}
 }
 // sourcery:end
 
 // sourcery:file:Source/{{ type.name }}Router.swift
+import UIKit
+
 protocol {{ type.name }}RoutingLogic {}
 
 final class {{ type.name }}Router: {{ type.name }}RoutingLogic {
-    weak var viewController: {{ type.name }}DisplayLogic?
+    weak var viewController: UIViewController?
 }
 // sourcery:end
 
-// sourcery:file:Spies/{{ type.name }}RoutingLogicSpy.swift
+// sourcery:file:Doubles/{{ type.name }}RoutingLogicSpy.swift
+@testable import {{ argument.module }}
 
 final class {{ type.name }}RoutingLogicSpy: {{ type.name }}RoutingLogic {
 }
 // sourcery:end
 
 // sourcery:file:Tests/{{ type.name }}RouterTests.swift
+import UIKit
 import XCTest
 
+@testable import {{ argument.module }}
+
 final class {{ type.name }}RouterTests: XCTestCase {
-    private let viewSpy = {{ type.name }}DisplaySpy()
+    private let viewController = UIViewController()
     private lazy var sut: {{ type.name }}Router = {
         let router = {{ type.name }}Router()
-        router.viewController = viewSpy
+        router.viewController = viewController
         return router
     }()
 }

@@ -3,25 +3,14 @@
 
 import XCTest
 
+@testable import LoopCleanPresentation
+
 final class MySceneConfiguratorTests: XCTestCase {
     private let sut = MySceneConfigurator()
 
-    func test_configurator_closesVipCycleWithNoRetainCycle() {
-        var viewController = sut.resolve() as? MySceneViewController
+    func test_resolve_returnsCorrectViewController() {
+        let viewController = sut.resolve() as? MySceneViewController
 
-        XCTAssertNotNil(viewController)
-
-        let interactor = viewController?.interactor as? MySceneInteractor
-        let presenter = interactor?.presenter as? MyScenePresenter
-        let router = interactor?.router as? MySceneRouter
-
-        XCTAssertNotNil(interactor)
-        XCTAssertNotNil(presenter)
-        XCTAssertNotNil(router)
-        XCTAssertTrue(presenter?.view === viewController)
-
-        viewController = nil
-
-        XCTAssertNil(presenter?.view)
+        XCTAssertTrue(viewController is MySceneViewController)
     }
 }

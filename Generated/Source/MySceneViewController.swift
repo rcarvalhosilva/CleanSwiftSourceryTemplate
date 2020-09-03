@@ -9,7 +9,7 @@ protocol MySceneDisplayLogic: AnyObject {
 }
 
 final class MySceneViewController: UIViewController, MySceneDisplayLogic {
-    let interactor: MySceneBusinessLogic
+    private let interactor: MySceneBusinessLogic
     private let customView: MySceneDisplay
 
     init(
@@ -30,7 +30,15 @@ final class MySceneViewController: UIViewController, MySceneDisplayLogic {
         self.view = customView
     }
 
+    func fillEmail() {
+        interactor.fillEmail(request: .init())
+    }
+
     func displayEmail(viewModel: MyScene.EnterEmail.ViewModel) {} 
+
+    func fillPassword() {
+        interactor.fillPassword(request: .init())
+    }
 
     func displayPassword(viewModel: MyScene.EnterPassword.ViewModel) {} 
 }

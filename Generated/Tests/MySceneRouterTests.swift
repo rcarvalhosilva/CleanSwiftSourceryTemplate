@@ -1,13 +1,16 @@
 // Generated using Sourcery 0.17.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+import UIKit
 import XCTest
 
+@testable import LoopCleanPresentation
+
 final class MySceneRouterTests: XCTestCase {
-    private let viewSpy = MySceneDisplaySpy()
+    private let viewController = UIViewController()
     private lazy var sut: MySceneRouter = {
         let router = MySceneRouter()
-        router.viewController = viewSpy
+        router.viewController = viewController
         return router
     }()
 }

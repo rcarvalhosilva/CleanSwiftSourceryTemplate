@@ -3,6 +3,8 @@
 
 import XCTest
 
+@testable import LoopCleanPresentation
+
 final class MySceneInteractorTests: XCTestCase {
     private let presenterSpy = MyScenePresentationLogicSpy()
     private let routerSpy = MySceneRoutingLogicSpy()
