@@ -3,7 +3,7 @@
 
 import FBSnapshotTestCase
 
-@testable import LoopCleanPresentation
+@testable import MyModule
 
 final class MySceneViewTests: FBSnapshotTestCase {
     private lazy var sut = MySceneView()

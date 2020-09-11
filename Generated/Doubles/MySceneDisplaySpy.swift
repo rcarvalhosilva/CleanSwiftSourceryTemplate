@@ -4,7 +4,7 @@
 import UI
 import UIKit
 
-@testable import LoopCleanPresentation
+@testable import MyModule
 
 final class MySceneDisplaySpy: UIView, MySceneDisplay, StatefulObject {
     var currentState: State?

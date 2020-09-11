@@ -3,7 +3,7 @@
 
 import XCTest
 
-@testable import LoopCleanPresentation
+@testable import MyModule
 
 final class MySceneViewControllerTests: XCTestCase {
     private let interactorSpy = MySceneBusinessLogicSpy()

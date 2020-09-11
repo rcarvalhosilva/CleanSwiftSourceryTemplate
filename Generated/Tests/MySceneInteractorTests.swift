@@ -3,7 +3,7 @@
 
 import XCTest
 
-@testable import LoopCleanPresentation
+@testable import MyModule
 
 final class MySceneInteractorTests: XCTestCase {
     private let presenterSpy = MyScenePresentationLogicSpy()

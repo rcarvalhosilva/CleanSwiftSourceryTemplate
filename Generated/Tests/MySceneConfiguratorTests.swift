@@ -3,7 +3,7 @@
 
 import XCTest
 
-@testable import LoopCleanPresentation
+@testable import MyModule
 
 final class MySceneConfiguratorTests: XCTestCase {
     private let sut = MySceneConfigurator()

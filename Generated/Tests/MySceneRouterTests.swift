@@ -4,7 +4,7 @@
 import UIKit
 import XCTest
 
-@testable import LoopCleanPresentation
+@testable import MyModule
 
 final class MySceneRouterTests: XCTestCase {
     private let viewController = UIViewController()
